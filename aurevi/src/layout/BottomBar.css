@@ -1,0 +1,20 @@
+/* Fondo suave con blur */
+.bottom-bar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+/* Botón activo */
+.bottom-bar button.active {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff !important;
+}
+
+/* Transiciones suaves */
+.bottom-bar button {
+  transition: all 0.25s ease;
+}
