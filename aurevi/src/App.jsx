@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
+import { useWorld } from "./worlds/WorldContext";
 
 // Layout
 import Header from "./layout/Header.jsx";
@@ -19,6 +20,7 @@ import MyLibrary from "./screens/MyLibrary.jsx";
 import MarketItemDetail from "./screens/MarketItemDetail.jsx";
 import PublishMarketItem from "./screens/PublishMarketItem.jsx";
 import Wallet from "./screens/Wallet.jsx";
+import Messages from "./screens/Messages.jsx"; // 👈 NUEVO
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
@@ -26,7 +28,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  const [activeWorld, setActiveWorld] = useState("publico");
+  // Mundo activo (aunque ahora no lo usemos mucho, lo dejamos coherente)
+  const { activeWorld } = useWorld();
 
   // ==========================
   //     LOGIN / USUARIO
@@ -64,7 +67,8 @@ function App() {
   const renderScreen = () => {
     switch (currentScreen) {
       case "home":
-        return <HomeFeed activeWorld={activeWorld} navigate={navigate} />;
+        // HomeFeed ya usa useWorld internamente
+        return <HomeFeed navigate={navigate} />;
 
       case "explore":
         return <Explore navigate={navigate} />;
@@ -113,8 +117,11 @@ function App() {
         return <WatchVideo videoId={videoId} navigate={navigate} />;
       }
 
+      case "messages":
+        return <Messages navigate={navigate} params={screenParams} />;
+
       default:
-        return <HomeFeed activeWorld={activeWorld} navigate={navigate} />;
+        return <HomeFeed navigate={navigate} />;
     }
   };
 
@@ -146,7 +153,7 @@ function App() {
   // ==========================
   return (
     <div className="aurevi-app">
-      <Header activeWorld={activeWorld} onChangeWorld={setActiveWorld} />
+      <Header />
       <main className="aurevi-main">{renderScreen()}</main>
       <BottomBar
         current={currentScreen}

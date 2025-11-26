@@ -139,7 +139,7 @@ function HomeFeed() {
   }, []);
 
   // ----------------------------------------------------
-  // Reacción predominante del usuario
+  // Reacción predominante del usuario (VERSIÓN NUEVA SIN group())
   // ----------------------------------------------------
   useEffect(() => {
     async function loadTopReaction() {
@@ -149,13 +149,11 @@ function HomeFeed() {
       }
 
       try {
+        // Traemos todas las reacciones del usuario
         const { data, error } = await supabase
           .from("video_reactions")
-          .select("reaction, total:count(*)")
-          .eq("user_id", currentUser.id)
-          .group("reaction")
-          .order("total", { ascending: false })
-          .limit(1);
+          .select("reaction")
+          .eq("user_id", currentUser.id);
 
         if (error) {
           console.error("Error obteniendo reacción predominante:", error);
@@ -163,11 +161,29 @@ function HomeFeed() {
           return;
         }
 
-        if (data && data.length > 0) {
-          setTopReaction(data[0].reaction);
-        } else {
+        if (!data || data.length === 0) {
           setTopReaction(null);
+          return;
         }
+
+        // Contamos cuántas veces aparece cada reacción
+        const counts = data.reduce((acc, row) => {
+          if (!row.reaction) return acc;
+          acc[row.reaction] = (acc[row.reaction] || 0) + 1;
+          return acc;
+        }, {});
+
+        // Elegimos la reacción con mayor conteo
+        let top = null;
+        let max = 0;
+        for (const [reaction, count] of Object.entries(counts)) {
+          if (count > max) {
+            max = count;
+            top = reaction;
+          }
+        }
+
+        setTopReaction(top);
       } catch (err) {
         console.error("Error inesperado en loadTopReaction:", err);
         setTopReaction(null);
@@ -642,7 +658,7 @@ function HomeFeed() {
     const safeScore = Math.max(1, Math.min(5, Number(score) || 1));
     const segments = Array.from({ length: 5 }, (_, i) => i < safeScore);
 
-  return (
+    return (
       <div
         style={{
           display: "flex",
@@ -713,7 +729,8 @@ function HomeFeed() {
   }
 
   const worldLabel = WORLD_LABELS[activeWorld] || "Mundo público";
-// ----------------------------------------------------
+
+  // ----------------------------------------------------
   // Render
   // ----------------------------------------------------
   return (
@@ -730,7 +747,7 @@ function HomeFeed() {
           <strong>Mundo activo:</strong> {activeWorld}
         </p>
       </div>
-	  
+
       {/* Bloque pequeño con mood/tendencia del usuario */}
       {currentUser && (viewerMood || viewerTrend || personalMission || topReaction) && (
         <div

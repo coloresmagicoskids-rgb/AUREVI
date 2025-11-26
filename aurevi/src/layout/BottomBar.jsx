@@ -1,6 +1,6 @@
 // src/layout/BottomBar.jsx
 import React from "react";
-import "./BottomBar.css"; // Asegúrate de tener esta línea si usas CSS aparte
+import "./BottomBar.css";
 
 function BottomBar({ current, onChange }) {
   const items = [
@@ -10,6 +10,7 @@ function BottomBar({ current, onChange }) {
     { key: "market", label: "Mercado", icon: "🛒" },
     { key: "wallet", label: "Monedas", icon: "🪙" },
     { key: "notifications", label: "Alertas", icon: "🔔" },
+    { key: "messages", label: "Mensajes", icon: "💬" }, // 👈 Mensajes aquí
     { key: "profile", label: "Perfil", icon: "👤" },
   ];
 
@@ -19,7 +20,7 @@ function BottomBar({ current, onChange }) {
       style={{
         display: "flex",
         justifyContent: "space-around",
-        alignItems: "Center",
+        alignItems: "center",
         background: "rgba(255,255,255,0.1)",
         padding: "10px 15px",
         borderRadius: "30px",
