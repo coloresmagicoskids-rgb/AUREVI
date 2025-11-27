@@ -4,7 +4,7 @@ import { supabase } from "../supabaseClient";
 import CommentsPanel from "../components/CommentsPanel";
 import VideoReactions from "../components/VideoReactions";
 import { useWorld } from "../worlds/WorldContext";
-import { WORLD_LABELS } from "../worlds/worldTypes";
+import { WORLD_TYPES, WORLD_LABELS } from "../worlds/worldTypes";
 
 function HomeFeed() {
   const { activeWorld } = useWorld();
