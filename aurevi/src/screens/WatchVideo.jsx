@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useWorld } from "../worlds/WorldContext";
-import { WORLD_LABELS } from "../worlds/WorldTypes";
+import { WORLD_LABELS } from "../worlds/worldTypes";
 
 function WatchVideo({ videoId, navigate }) {
   const { activeWorld, setActiveWorld } = useWorld();
